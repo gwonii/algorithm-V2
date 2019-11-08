@@ -1,5 +1,11 @@
 #target/ 특정 디렉토리에 있는 파일 무시하기 
 
+# vscode iml 파일들
 .vscode/
 
+# vscode exe 실행파일
+*.exe
 
+
+# window 제외파일
+Thumbs.db
