@@ -1,9 +1,12 @@
 #include <iostream>
 #include <vector>
 
+// 거스름돈 문제 
+// 일종의 "그리디 알고리즘"이라고 할 수 있다. 
+
+
 
 using namespace std;
-
 
 int main() {
 

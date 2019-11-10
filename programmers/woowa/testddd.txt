@@ -1,0 +1,153 @@
+#include <string>
+#include <vector>
+#include <stdio.h>
+#include <iostream>
+
+using namespace std;
+
+vector<bool> solution(vector<string> infos, vector<string> actions);
+
+int main(void) {
+
+   vector<string> infos;
+   vector<string> actions;
+
+   infos.push_back("kim password");
+   infos.push_back("lee abc");
+   actions.push_back("ADD 30");
+   actions.push_back("LOGIN kim abc");
+   actions.push_back("LOGIN lee password");
+   actions.push_back("LOGIN kim password");
+   actions.push_back("LOGIN kim password");
+   actions.push_back("ADD 30");
+   actions.push_back("ORDER");
+   actions.push_back("ORDER");
+   actions.push_back("ADD 40");
+   actions.push_back("ADD 50");
+
+
+   solution(infos, actions);
+
+   return 0;
+}
+
+
+vector<bool> solution(vector<string> infos, vector<string> actions) {
+   vector<bool> answer;
+   int loginflag = 0;
+   int addfalg =0;
+   //input tokenizing -> actions [first_word second_word third_word]
+   for (int action = 0; action < actions.size(); action++) {
+      int first_tok = 0;
+      int second_tok = 0;
+      int third_tok = 0;
+
+      for (int checker = 0; checker < actions[action].size(); checker++) {
+         if (actions[action][checker] == ' ') {
+   
+            if (second_tok == 0) {
+               second_tok = checker;
+            }
+            else {
+               third_tok = checker;
+            }
+         }
+      }
+
+      //printf("%d %d", first_tok, second_tok);
+
+      string first_word = actions[action].substr(first_tok, second_tok);
+      string second_word;
+      string third_word;
+      //printf("%d %d %d", first_tok, second_tok, third_tok);
+      if (second_tok == 0) {
+         first_word = actions[action];
+      }
+      else if (third_tok == 0) {
+         first_word = actions[action].substr(first_tok, second_tok);
+         second_word = actions[action].substr(second_tok + 1);
+      }
+      else {
+         first_word = actions[action].substr(first_tok, second_tok);
+         second_word = actions[action].substr(second_tok+1, third_tok-second_tok-1);
+         third_word = actions[action].substr(third_tok+1);
+      }
+      //cout << first_word <<"||" << second_word<<"||";
+      //end tokenizing
+
+      //**start action processing**//
+      
+      if (first_word.compare("LOGIN")==0) {
+         //info tokenizing
+         if (loginflag == 1) {
+            answer.push_back(false);
+            printf("False\n");
+            
+         }
+         else {
+            for (int info = 0; info < infos.size(); info++) {
+               string id;
+               string psswd;
+               int first_t = 0;
+               int second_t = 0;
+
+
+               for (int checker = 0; checker < infos[info].size(); checker++) {
+
+                  if (infos[info][checker] == ' ') {
+                     second_t = checker;
+                  }
+
+               }
+               printf("%d %d", first_t, second_t);
+               id = infos[info].substr(first_t, second_t);
+               psswd = infos[info].substr(second_t + 1);
+
+               cout << id << "||" << psswd;
+
+               if (id.compare(second_word) == 0 && psswd.compare(third_word) == 0) {
+                  loginflag = 1;
+                  answer.push_back(true);
+                  printf("true\n");
+                  
+               }
+            }
+            if (loginflag == 0) {
+               answer.push_back(false);
+               printf("False\n");
+               
+            }
+         }
+      }
+      else if (first_word.compare("ADD")==0) {
+         printf("add");
+         if (loginflag == 1) {
+            answer.push_back(true);
+            printf("true\n");
+            addfalg = 1;
+         }
+         else {
+            answer.push_back(false);
+            printf("false\n");
+         }
+         
+      }
+      else if (first_word.compare("ORDER")==0) {
+         printf("order");
+         if (addfalg == 1) {
+            answer.push_back(true);
+            printf("true\n");
+            addfalg = 0;
+         }
+         else {
+            answer.push_back(false);
+            printf("false\n");
+         }
+      }
+      
+      
+   }
+
+
+   return answer;
+}
