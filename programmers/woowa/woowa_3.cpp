@@ -69,13 +69,66 @@ void reset() {
     resultList.clear();
 }
 
-int calculate(string portions) {
+int allEat(double input, int solution) {
+
+        for (int i = 0; i < TOTALSIZE; i++) {
+        if (myList[i] < int(needList[i] * input) / 2 ) {
+            resultList[i]++;
+        }
+    }
+
+    for(int i = 0; i < TOTALSIZE; i++) {
+        if (resultList[i] == 1){
+            solution += priceList[i];
+        }
+    }
+    return solution;
+
+} 
+
+int manEat(double input, int solution) {
+
+    for (int i = 0; i < TOTALSIZE; i++) {
+        if (myList[i] < int(needList[i] * input)) {
+            resultList[i]++;
+        }
+    }
+
+    for(int i = 0; i < TOTALSIZE; i++) {
+        if (resultList[i] == 1){
+            solution += priceList[i];
+        }
+    }
+    return solution;
+
+}
+
+int calculate(string portions, int solution) {
     reset();
 
     double input = atof(portions.c_str());
     
-    cout << input;
+    if (portions == "0.0") {
+        return -1;
+    } else if (portions == "0.5") {
+        return -1;
+    } else if (portions == "1.0") {
+        solution += manEat(input, solution);
+
+    } else if (portions == "1.5") {
+        solution += allEat(input, solution);
+
+    } else if (portions == "2.0") {
+        solution += manEat(input, solution);
+
+    } else if (portions == "2.5") {
+        solution += allEat(input, solution);
+        
+    } else {
+        return -1;
+    }
     
+    return solution;
 }
 
 int main() {
